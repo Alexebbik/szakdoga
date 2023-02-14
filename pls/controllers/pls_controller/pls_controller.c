@@ -30,7 +30,7 @@ enum WheelDef{
 void init_devices(){
   int i;
 //the motors 
-  for (i=0;i<2;++i){
+  for (i=0;i<2;i++){
     wheels[i] = wb_robot_get_device(wheel_names[i]);
     wb_motor_set_velocity(wheels[i], 0);
     wb_motor_set_position(wheels[i], INFINITY);
@@ -63,11 +63,17 @@ int main(int argc, char **argv) {
 
     
     //the forward and turning speed
-    double left = 50;
-    double right = 10;
+    double left = -70;
+    double right = -70;
+    
 
     
     set_differential_drive(left, right);
+    
+    double balkerek = wb_motor_get_velocity(wheels[W_FL]);
+    double jobbkerek = wb_motor_get_velocity(wheels[W_FR]);
+    
+    printf("bal %f, jobb:%f\n",balkerek,jobbkerek);
   };
 
   
