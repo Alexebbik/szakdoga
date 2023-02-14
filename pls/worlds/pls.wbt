@@ -3,27 +3,75 @@
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/floors/protos/Floor.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/apartment_structure/protos/Wall.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.24897897219375315 0.38607318132042123 0.8882324977563427 1.263778637100758
-  position -4.1408914531190355 -6.726511029977257 5.22884978258895
+  orientation -0.23295684697021185 0.6224094856581546 0.7472198736733712 0.9370326325292532
+  position -3.4708343886949096 -4.527091371456487 7.394137220553191
   follow "robot"
-  followType "Mounted Shot"
+  followType "None"
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 Floor {
-  size 7 8
-  tileSize 10 2
+  translation 5 3 0
+  size 2 2
+  tileSize 4 2
+}
+Floor {
+  translation 1 3 0
+  name "floor(1)"
+  size 2 2
+  tileSize 4 2
+}
+Floor {
+  translation 3 5 0
+  name "floor(2)"
+  size 2 2
+  tileSize 4 2
+}
+Floor {
+  translation 7 5 0
+  name "floor(3)"
+  size 2 2
+  tileSize 4 2
+}
+Floor {
+  translation 3 3 0
+  name "floor(4)"
+  size 2 2
+  tileSize 4 2
+}
+Floor {
+  translation 7 3 0
+  name "floor(5)"
+  size 2 2
+  tileSize 4 2
+}
+Floor {
+  translation 9 3 0
+  name "floor(6)"
+  size 2 2
+  tileSize 4 2
+}
+Floor {
+  translation 3 1 0
+  name "floor(7)"
+  size 2 2
+  tileSize 4 2
+}
+Floor {
+  translation 7 1 0
+  name "floor(8)"
+  size 2 2
+  tileSize 4 2
 }
 Robot {
-  translation -0.5324665180357533 1.895507841019098 0.0690984389815688
-  rotation 0.0006303756979471681 0.0007083355321239233 0.9999995504435256 3.1409030179091593
+  translation 5 3 0.08
+  rotation 0 0 1 1.5701003061004253
   children [
     DEF RearRightCorner Transform {
       translation -0.05 0.075 0.047
@@ -417,54 +465,4 @@ Robot {
     mass 1
   }
   controller "pls_controller"
-}
-Wall {
-}
-Wall {
-  name "wall(1)"
-}
-Wall {
-  name "wall(2)"
-}
-Wall {
-  name "wall(3)"
-}
-Wall {
-  name "wall(4)"
-}
-Wall {
-  name "wall(5)"
-}
-Wall {
-  name "wall(6)"
-}
-Wall {
-  name "wall(7)"
-}
-Wall {
-  name "wall(8)"
-}
-Wall {
-  name "wall(9)"
-}
-Wall {
-  name "wall(10)"
-}
-Wall {
-  name "wall(11)"
-}
-Wall {
-  name "wall(12)"
-}
-Wall {
-  name "wall(13)"
-}
-Wall {
-  name "wall(14)"
-}
-Wall {
-  name "wall(15)"
-}
-Wall {
-  name "wall(16)"
 }

@@ -63,8 +63,8 @@ int main(int argc, char **argv) {
 
     
     //the forward and turning speed
-    double left = -70;
-    double right = -70;
+    double left = -50;
+    double right = -50;
     
 
     
