@@ -1,0 +1,444 @@
+#VRML_SIM R2023a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/vehicles/protos/abstract/Car.proto"
+EXTERNPROTO "../protos/VehicleWheel.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/road/protos/StraightRoadSegment.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.2747543935288323 0.11954806050497531 0.9540536067046245 2.3546627695261693
+  position 7.116625221424845 -5.795488617870439 5.537646444950275
+  follow "vehicle"
+  followType "Mounted Shot"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  translation 11 0 0
+  floorSize 10 10
+}
+StraightRoadSegment {
+}
+Car {
+  controller "my_controller"
+  trackFront 0.5
+  trackRear 0.5
+  wheelbase 1
+  extensionSlot [
+    DistanceSensor {
+      translation -0.09 0.15 0.05
+      rotation 0 0 1 2.618
+      children [
+        Shape {
+          geometry Box {
+            size 0.03 0.03 0.03
+          }
+        }
+      ]
+      name "dsRearLeft"
+      lookupTable [
+        0 1000 0
+        0.05 1000 0
+        0.1 900 0
+        0.25 500 0
+        0.5 100 0
+        1 1 0
+      ]
+      type "laser"
+    }
+    DistanceSensor {
+      translation -0.09 -0.15 0.05
+      rotation 0 0 1 -2.617985307179586
+      children [
+        Shape {
+          geometry Box {
+            size 0.03 0.03 0.03
+          }
+        }
+      ]
+      name "dsRearRight"
+      lookupTable [
+        0 1000 0
+        0.05 1000 0
+        0.1 900 0
+        0.25 500 0
+        0.5 100 0
+        1 1 0
+      ]
+      type "laser"
+    }
+    DistanceSensor {
+      translation 0.3 0.15 0.05
+      rotation 0 0 -1 -1.5708053071795867
+      children [
+        Shape {
+          geometry Box {
+            size 0.03 0.03 0.03
+          }
+        }
+      ]
+      name "dsLeft"
+      lookupTable [
+        0 1000 0
+        0.05 1000 0
+        0.1 900 0
+        0.25 500 0
+        0.5 100 0
+        1 1 0
+      ]
+      type "laser"
+    }
+    DistanceSensor {
+      translation 0.3 -0.15 0.05
+      rotation 0 0 -1 1.5707996938995747
+      children [
+        Shape {
+          geometry Box {
+            size 0.03 0.03 0.03
+          }
+        }
+      ]
+      name "dsRight"
+      lookupTable [
+        0 1000 0
+        0.05 1000 0
+        0.1 900 0
+        0.25 500 0
+        0.5 100 0
+        1 1 0
+      ]
+      type "laser"
+    }
+    DistanceSensor {
+      translation 0.75 0.15 0.05
+      rotation 0 0 -1 -0.5236053071795865
+      children [
+        Shape {
+          geometry Box {
+            size 0.03 0.03 0.03
+          }
+        }
+      ]
+      name "dsFrontLeft"
+      lookupTable [
+        0 1000 0
+        0.05 1000 0
+        0.1 900 0
+        0.25 500 0
+        0.5 100 0
+        1 1 0
+      ]
+      type "laser"
+    }
+    DistanceSensor {
+      translation 0.75 -0.15 0.05
+      rotation 0 0 -1 0.5235996938995747
+      children [
+        Shape {
+          geometry Box {
+            size 0.03 0.03 0.03
+          }
+        }
+      ]
+      name "dsFrontRight"
+      lookupTable [
+        0 1000 0
+        0.05 1000 0
+        0.1 900 0
+        0.25 500 0
+        0.5 100 0
+        1 1 0
+      ]
+      type "laser"
+    }
+    Compass {
+    }
+    GPS {
+    }
+    DEF LeftSpoiler Transform {
+      translation -0.085 0.1 0.18
+      rotation 0 1 0 1.0472
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.75 1 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.1 0.04 0.04
+          }
+        }
+      ]
+    }
+    DEF RightSpoiler Transform {
+      translation -0.085 -0.1 0.18
+      rotation 0 1 0 1.0472
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.75 1 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.1 0.04 0.04
+          }
+        }
+      ]
+    }
+    DEF Spoiler Transform {
+      translation -0.13 0 0.22
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.75 1 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.1 0.3 0.04
+          }
+        }
+      ]
+    }
+    DEF RearLeftCorner Transform {
+      translation 0.15 0.105 0.1925
+      scale 2.75 0.6 0.7
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.666667 0
+            roughness 1
+            metalness 0
+          }
+          geometry Cone {
+            bottomRadius 0.07
+            height 0.16
+            subdivision 32
+          }
+        }
+      ]
+    }
+    DEF FrontLeftCorner Transform {
+      translation 0.45 0.105 0.192
+      scale 4 0.55 0.7
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.666667 0
+            roughness 1
+            metalness 0
+          }
+          geometry Cone {
+            bottomRadius 0.08
+            height 0.16
+            subdivision 32
+          }
+        }
+      ]
+    }
+    DEF FrontRightCorner Transform {
+      translation 0.45 -0.105 0.192
+      scale 4 0.55 0.7
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.666667 0
+            roughness 1
+            metalness 0
+          }
+          geometry Cone {
+            bottomRadius 0.08
+            height 0.16
+            subdivision 32
+          }
+        }
+      ]
+    }
+    DEF RearRightCorner Transform {
+      translation 0.15 -0.104 0.1925
+      scale 2.75 0.6 0.7
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.666667 0
+            roughness 1
+            metalness 0
+          }
+          geometry Cone {
+            bottomRadius 0.07
+            height 0.16
+            subdivision 32
+          }
+        }
+      ]
+    }
+    DEF LeftGlass Transform {
+      translation 0.3 0.08 0.177
+      rotation 1 0 0 0.39269930610042536
+      children [
+        Shape {
+          appearance PBRAppearance {
+          }
+          geometry Box {
+            size 0.29 0.1 0.11
+          }
+        }
+      ]
+    }
+    DEF RightGlass Transform {
+      translation 0.3 -0.08 0.177
+      rotation 1 0 0 2.7488996938995744
+      children [
+        Shape {
+          appearance PBRAppearance {
+          }
+          geometry Box {
+            size 0.29 0.1 0.11
+          }
+        }
+      ]
+    }
+    DEF RearGlass Transform {
+      translation 0.1 0 0.163
+      rotation 0 1 0 1.0472003061004251
+      children [
+        Shape {
+          appearance PBRAppearance {
+          }
+          geometry Box {
+            size 0.1 0.21 0.17
+          }
+        }
+      ]
+    }
+    DEF FrontGlass Transform {
+      translation 0.52 0 0.171
+      rotation 0 1 0 -1.250899693899575
+      children [
+        Shape {
+          appearance PBRAppearance {
+          }
+          geometry Box {
+            size 0.1 0.205 0.2
+          }
+        }
+      ]
+    }
+    DEF FrontBumper Transform {
+      translation 0.59 -2.03924e-08 0.1
+      rotation 1 0 0 -1.5707953071795862
+      scale 4 2 1
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.666667 0
+            roughness 1
+            metalness 0
+          }
+          geometry Cylinder {
+            height 0.31
+            radius 0.05
+          }
+        }
+      ]
+    }
+    DEF RearBumper Transform {
+      translation -0.03 0 0.1
+      rotation 1 0 0 -1.5707953071795862
+      scale 1.2 1.6 1
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.666667 0
+            roughness 1
+            metalness 0
+          }
+          geometry Cylinder {
+            height 0.31
+            radius 0.05
+          }
+        }
+      ]
+    }
+    DEF MainBody Transform {
+      translation 0.3 0 0.09
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.666667 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.7 0.3 0.12
+          }
+        }
+      ]
+    }
+    DEF TopBody Transform {
+      translation 0.3 0 0.2
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0 0.666667 0
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.3 0.21 0.1
+          }
+        }
+      ]
+    }
+    VehicleLights {
+    }
+  ]
+  boundingObject Transform {
+    translation 0.5 0 0.2
+    children [
+      Box {
+        size 1 0.4 0.3
+      }
+    ]
+  }
+  physics Physics {
+  }
+  wheelFrontRight VehicleWheel {
+    name "front right wheel"
+    physics Physics {
+      density -1
+      mass 1
+    }
+  }
+  wheelFrontLeft VehicleWheel {
+    name "front left wheel"
+    physics Physics {
+      density -1
+      mass 1
+    }
+    wheelSide TRUE
+  }
+  wheelRearRight VehicleWheel {
+    name "rear right wheel"
+    physics Physics {
+      density -1
+      mass 1
+    }
+  }
+  wheelRearLeft VehicleWheel {
+    name "rear left wheel"
+    physics Physics {
+      density -1
+      mass 1
+    }
+    wheelSide TRUE
+  }
+}

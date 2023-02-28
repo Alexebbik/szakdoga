@@ -1,0 +1,89 @@
+#VRML_SIM R2023a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "../protos/Car.proto"
+EXTERNPROTO "../protos/VehicleWheel.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/road/protos/StraightRoadSegment.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/projects/objects/floors/protos/Floor.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.3172786399987611 0.5711854138751927 0.7570214578047054 1.2660557738130216
+  position 9.455907528810524 2.4840184875740396 2.916061653964443
+  follow "vehicle"
+  followType "Mounted Shot"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Car {
+  translation 10.0776 5.2398 0.125
+  rotation 0 0 -1 0
+  controller "mainrobot_controller"
+  suspensionFrontSpringConstant 1
+  suspensionFrontDampingConstant 1
+  suspensionRearSpringConstant 1
+  suspensionRearDampingConstant 1
+  wheelsDampingConstant 1
+  boundingObject Transform {
+    translation 0.3 0 0.13
+    children [
+      Shape {
+        geometry Box {
+          size 1 0.31 0.3
+        }
+      }
+    ]
+  }
+  physics Physics {
+    density -1
+    mass 1
+  }
+  wheelFrontRight VehicleWheel {
+    name "front right wheel"
+    physics Physics {
+      density -1
+      mass 1
+    }
+  }
+  wheelFrontLeft VehicleWheel {
+    name "front left wheel"
+    physics Physics {
+      density -1
+      mass 1
+    }
+  }
+  wheelRearRight VehicleWheel {
+    name "rear right wheel"
+    physics Physics {
+      density -1
+      mass 1
+    }
+  }
+  wheelRearLeft VehicleWheel {
+    name "rear left wheel"
+    physics Physics {
+      density -1
+      mass 1
+    }
+  }
+  brakeCoefficient 1
+}
+Floor {
+  translation 11.5 7 0
+  size 4 5
+}
+StraightRoadSegment {
+  translation 16 0 0
+  rotation 0 0 1 1.5707996938995747
+  name "road8"
+  width 4
+  roadBorderHeight 0.3
+  startingRoadBorderWidth 0.1
+  endingRoadBorderWidth 0.1
+  bottom TRUE
+  length 4.9
+}
