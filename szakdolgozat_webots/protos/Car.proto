@@ -12,7 +12,7 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/project
 
 PROTO Car [
 #fields inherited from AckermannVehicle
-  field SFVec3f    translation                    -1 0 0.125
+  field SFVec3f    translation                    0 0 0.4
   field SFRotation rotation                       0 0 1 0
   field SFString   name                           "vehicle"
   field SFString   model                          "car"
@@ -20,9 +20,9 @@ PROTO Car [
   field MFString   controllerArgs                 []
   field SFBool     supervisor                     FALSE
   field SFBool     synchronization                TRUE
-  field SFFloat    trackFront                     0.5
-  field SFFloat    trackRear                      0.5
-  field SFFloat    wheelbase                      0.55
+  field SFFloat    trackFront                     1.7
+  field SFFloat    trackRear                      1.7
+  field SFFloat    wheelbase                      4.0
   field SFFloat    minSteeringAngle              -1
   field SFFloat    maxSteeringAngle               1
   field SFFloat    suspensionFrontSpringConstant  100000
@@ -36,9 +36,9 @@ PROTO Car [
   field SFNode     physics                        NULL
   field SFFloat    radarCrossSection              100
   field MFColor    recognitionColors              []
-  field SFNode     wheelFrontRight                VehicleWheel { name "front right wheel" wheelSide TRUE}
+  field SFNode     wheelFrontRight                VehicleWheel { name "front right wheel" }
   field SFNode     wheelFrontLeft                 VehicleWheel { name "front left wheel" wheelSide TRUE}
-  field SFNode     wheelRearRight                 VehicleWheel { name "rear right wheel" wheelSide TRUE}
+  field SFNode     wheelRearRight                 VehicleWheel { name "rear right wheel" }
   field SFNode     wheelRearLeft                  VehicleWheel { name "rear left wheel" wheelSide TRUE}
 #fields specific to Car
   field SFString{"traction", "propulsion", "4x4"}
@@ -49,7 +49,7 @@ PROTO Car [
   field SFFloat    engineSoundRpmReference        1000
   field SFFloat    brakeCoefficient               700
   field SFFloat    time0To100                     10.0                       # Defines the acceleration of the car.
-  field SFFloat    maxVelocity                    100                         # Defines the maximum velocity [m/s] of the car.
+  field SFFloat    maxVelocity                    50                         # Defines the maximum velocity [m/s] of the car.
   field SFFloat    engineMaxTorque                250                        # Defines the maximum torque of the motor [Nm] used to compute the electric engine torque.
   field SFFloat    engineMaxPower                 50000                      # Defines the maximum power of the motor [W] used to compute the electric engine torque.
   field SFFloat    engineMinRPM                   1000                       # Defines the minimum RPM of the motor (only used in the case of combustion engine).
