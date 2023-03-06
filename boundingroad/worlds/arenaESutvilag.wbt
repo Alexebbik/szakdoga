@@ -11,8 +11,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023a/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.42650966650240735 0.4995313389322015 0.7540278150072497 1.6947748923247952
-  position 13.451227888276557 4.332351874351153 7.109086852866418
+  orientation 0.058002941983068636 0.993907074446574 -0.0937250558087908 1.113775914719679
+  position 8.15974077877496 8.619732225837025 9.994690752457318
   follow "vehicle"
   followType "Mounted Shot"
 }
@@ -161,7 +161,7 @@ RoadIntersection {
   boundingObject TRUE
 }
 Car {
-  translation 13 8 0.3
+  translation 12.5 8 0.225
   controller "my_controller"
   extensionSlot [
     DistanceSensor {
@@ -267,8 +267,10 @@ Car {
       type "laser"
     }
     Compass {
+      translation 0.5 0 0
     }
     GPS {
+      translation 0.5 0 0
     }
     DEF LeftSpoiler Transform {
       translation -0.13 0.15 0.2
