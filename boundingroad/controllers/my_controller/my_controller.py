@@ -15,18 +15,16 @@ driver = Driver()
 timestep = int(driver.getBasicTimeStep())
 
 # Example graph represented as a dictionary where each vertex is a key and its value is a list of adjacent vertices
-graph = {0: [1, 2], 1: [0, 3, 5, 7], 2: [0, 4, 6, 8], 3: [1, 10], 4: [2, 11], 5: [0], 6: [2], 7: [1], 8: [2], 9: [10, 11], 10: [3, 9], 11: [9, 4]}
-graph_coords = {0: [13, 8], 1: [8, 8], 2: [18, 8], 3: [8, 13], 4: [18, 13], 5: [3, 8], 6: [23, 8], 7: [8, 3], 8: [18, 3], 9: [13, 8], 10: [8, 18], 11: [18, 18]}
+graph = {0: [1, 2], 1: [0, 3, 5, 7], 2: [0, 4, 6, 8], 3: [1, 10], 4: [2, 11], 5: [1], 6: [2], 7: [1], 8: [2], 9: [10, 11], 10: [3, 9, 13], 11: [4, 9, 12], 12: [11, 13], 13: [10, 12]}
+graph_coords = {0: [16, 10], 1: [10, 10], 2: [22.2, 10], 3: [10, 16], 4: [22.2, 16], 5: [4, 10], 6: [28.4, 10], 7: [10, 4], 8: [22.2, 4], 9: [16, 22], 10: [10, 22], 11: [22.2, 22.2], 12: [20.5, 28.5], 13: [11.5, 28.5]}
 
-def bfs_shortest_path(graph, start, end):
+def pathfinder(graph, start, end):
     # Queue to store the nodes to be visited
     queue = deque()
-    
     # Dictionary to keep track of visited nodes and their parent
     visited = {start: None}
     # Enqueue the starting node
     queue.append(start)
-    
     while queue:
         current_node = queue.popleft()
         # Check if we reached the end node
@@ -39,77 +37,27 @@ def bfs_shortest_path(graph, start, end):
             # Reverse the path to get it in the correct order (from start to end)
             path.reverse()
             return path
-        
         # Visit the adjacent nodes
         for neighbor in graph[current_node]:
             if neighbor not in visited:
                 visited[neighbor] = current_node
                 queue.append(neighbor)
-    
     # If we reached here, it means there is no path from start to end node
     return None
 
-dsL = DistanceSensor("dsLeft")
-dsL.enable(timestep)
-dsRR = DistanceSensor("dsRearRight")
-dsRR.enable(timestep)
-dsRL = DistanceSensor("dsRearLeft")
-dsRL.enable(timestep)
-dsR = DistanceSensor("dsRight")
-dsR.enable(timestep)
-dsFL = DistanceSensor("dsFrontLeft")
-dsFL.enable(timestep)
-dsFR = DistanceSensor("dsFrontRight")
-dsFR.enable(timestep)
 
+ds_names = ["dsRearLeft","dsLeft","dsFrontLeft","dsFrontRight","dsRight","dsRearRight"]
+ds_list = ['','','','','','']
+
+for i in range(6):
+    ds_list[i] = DistanceSensor(ds_names[i])
+    ds_list[i].enable(timestep)
 compass = Compass("compass")
 compass.enable(timestep)
 gps = GPS("gps")
 gps.enable(timestep)
 
-
-
-target_x = 8
-target_y = 8
-
-start = 0
-end = 0
-start_coord = []
-end_coord = []
-target_radius = 0.25
-
-
-def set_target():
-    
-    return None
-
-# You should insert a getDevice-like function in order to get the
-# instance of a device of the driver. Something like:
-#  motor = driver.getDevice('motorname')
-#  ds = driver.getDevice('dsname')
-#  ds.enable(timestep)
-
-#maximalis jobb driver.setSteeringAngle(0.5)
-#maximalis bal driver.setSteeringAngle(-0.5)
-
-# Main loop:
-# - perform simulation steps until Webots is stopping the controller
-stop = 0
-turn = 1
-helper = 0
-counter = 0
-while driver.step() != -1:
-    current_x, current_y, z = gps.getValues()
-    
-    
-    driver.setCruisingSpeed(10)
-    driver.setSteeringAngle(0)
-    
-    # read current GPS values
-    
-    target_distance = math.fabs(current_x - target_x) + math.fabs(current_y - target_y)
-    #print(target_distance)
-    # Get the values from the compass
+def getTargetBearing():
     north = compass.getValues()
     rad = math.atan2(north[1],north[0])
     target_bearing = math.atan2(-target_y + current_y, target_x - current_x)
@@ -120,147 +68,204 @@ while driver.step() != -1:
     target_bearing += 90
     if target_bearing >= 360.0:
         target_bearing = target_bearing - 360
-    #print(target_bearing)
+    return target_bearing
+
+target_x = 0
+target_y = 0
+path = []
+
+'''def getNextTarget():
+    current_target = path.pop()
+    print("The current target is point:",current_target)
+    target_coords = graph_coords[current_target]
+    target_x = target_coords[0]
+    target_y = target_coords[1]
+    print("Its coordinates are x:",target_x,"y:",target_y)
+    print("Going on")'''
+
+start = 0
+end = 0
+target_radius = 0.25
+
+
+# You should insert a getDevice-like function in order to get the
+# instance of a device of the driver. Something like:
+#  motor = driver.getDevice('motorname')
+#  ds = driver.getDevice('dsname')
+#  ds.enable(timestep)
+
+#maximalis jobb driver.setSteeringAngle(0.75)
+#maximalis bal driver.setSteeringAngle(-0.75)
+
+# Main loop:
+# - perform simulation steps until Webots is stopping the controller
+stop = 0
+turn = 1
+time_helper = 0
+path_helper = 1
+counter = 0
+angle = 0
+speed = 10
+end_coords = []
+while driver.step() != -1:
+
+    current_x, current_y, z = gps.getValues()
+    current_time = driver.getTime()
+    target_bearing = getTargetBearing()
+    
+    if current_time < 0.06:
+        print("Lets start with getting a path!")
+    
+    if not path and path_helper == 1:
+        #end = random.randint(0,11)
+        while end == start:
+            end = random.randint(0,13)
+        #print("start:",start)
+        #print("end:",end)
+        path = pathfinder(graph, start, end)
+        print("The new path is:",path)
+        path.reverse()
+        #print("reversed path:",path)
+        end_target = path[0]
+        end_coords = graph_coords[end_target]
+        #print("end:",end_coords)
+        current_target = path.pop()
+        #print("The current target is point:",current_target)
+        target_coords = graph_coords[current_target]
+        target_x = target_coords[0]
+        target_y = target_coords[1]
+        #print("Its coordinates are x:",target_x,"y:",target_y)
+        #print("Going on")
+        path_helper = 0
+    
+    # read current GPS values
+    
+    target_distance = math.fabs(current_x - target_x) + math.fabs(current_y - target_y)
+    #print(target_distance)
+    # Get the values from the compass
+    
     #a target iranya 0 elore picit jobbra, 90 jobbra
     #180 mogotte, 270 balra, 360 elore picit balra
 
-    current_time = driver.getTime()
+    
 
     #print current GPS position
     #print('Current position: ', current_x, current_y)
     
-    dsRLValue = dsRL.getValue()
-    dsLValue = dsL.getValue()
-    dsFLValue = dsFL.getValue()
-    dsFRValue = dsFR.getValue()
-    dsRValue = dsR.getValue()
-    dsRRValue = dsRR.getValue()
+    ds_values = ['','','','','','']
+    for i in range(6):
+        ds_values[i] = ds_list[i].getValue()
+        #print(ds_values[i])
     
-    path = bfs_shortest_path(graph, start, end)
+    #print(ds_values[2])
+    #print(ds_values[5])
     
-    if current_time < 0.064:
-        print("Your starting point is:",current_x,"x",current_y,"y")
-    set_target()
     
+    #print("vege:",math.fabs(current_x - end_coords[0]) + math.fabs(current_y - end_coords[1]))
     if target_distance < target_radius:
         #print ("MEGVAN")
-        driver.setCruisingSpeed(0)
-        driver.setSteeringAngle(0)
+        if (math.fabs(current_x - end_coords[0]) + math.fabs(current_y - end_coords[1])) < target_radius:
+            print("We reached our final target. We will need a new path!")
+            start = end
+            path_helper = 1
+        speed = 0
+        angle = 0
         stop = 1
-        helper += 1
-        #print(helper)
-        if helper == 1:
+        time_helper += 1
+        #print(time_helper)
+        if time_helper == 1:
             counter += 1
             stop_time = driver.getTime()
-            #print(stop_time)
-            print("landolas")
+            print(counter - 1,". landing")
         if current_time > stop_time + 3:
-            print("megyunk")
-            set_target()
+            current_target = path.pop()
+            print("The current target is point:",current_target)
+            target_coords = graph_coords[current_target]
+            target_x = target_coords[0]
+            target_y = target_coords[1]
+            print("Its coordinates are x:",target_x,"y:",target_y)
+            print("Going on")
             stop = 0
-            helper = 0
+            time_helper = 0
             turn = 1
 
     if stop == 0:
         if turn == 1:
             if target_bearing >= 90 and target_bearing < 180:
-                driver.setSteeringAngle(-0.5)
-                driver.setCruisingSpeed(-1)
-                #print("jobb4")
+                angle = -0.75
+                speed = -2
+                #print("jobbhat")
             if target_bearing >= 180 and target_bearing <= 270:
-                driver.setSteeringAngle(0.5)
-                driver.setCruisingSpeed(-1)
-                #print("bal4")
-            if target_bearing > 1 and target_bearing <= 30:
-                driver.setSteeringAngle(0.2)
-                driver.setCruisingSpeed(7.5)
-                #print("jobb2")
-            if target_bearing < 90 and target_bearing > 30:
-                driver.setSteeringAngle(0.4)
-                driver.setCruisingSpeed(5)
-                #print("jobb3")
-            if target_bearing > 270 and target_bearing < 330:
-                driver.setSteeringAngle(-0.4)
-                driver.setCruisingSpeed(5)
-                #print("bal3")
-            if target_bearing >= 330 and target_bearing < 359:
-                driver.setSteeringAngle(-0.2)
-                driver.setCruisingSpeed(7.5)
-                #print("bal2")
-            if target_bearing >= 359:
-                driver.setSteeringAngle(-0.1)
-                driver.setCruisingSpeed(10)
-                #print("bal1")
-            if target_bearing <= 1:
-                driver.setSteeringAngle(0.1)
-                driver.setCruisingSpeed(10)
-                #print("jobb1")
+                angle = 0.75
+                speed = -2
+                #print("balhat")
+            if target_bearing > 0.01 and target_bearing < 90:
+                speed = ((target_bearing - 0.01) / (90 - 0.01)) * (1 - 10) + 10
+                angle = ((target_bearing - 0.01) / (90 - 0.01)) * (0.75 - 0.1) + 0.1
+                #print("jobb")
+            if target_bearing < 359.9  and target_bearing > 270:
+                speed = ((target_bearing - 270) / (359.9 - 270)) * (10 - 1) + 1
+                angle = ((target_bearing - 270) / (359.9 - 270)) * (-0.1 + 0.75) -0.75
+                #print("bal")
             if target_bearing >=359.9 and target_bearing <=0.01:
                 turn = 0
+                angle = 0
                 #print("egyenes")
-        if target_distance < 2 * target_radius:
-            driver.setCruisingSpeed(0.5)
-            #print("nagyon")
-        if target_distance <= 10 * target_radius and target_distance > 2 * target_radius:
-            driver.setCruisingSpeed(1)
+                            
+        if target_distance <= 7.5 * target_radius:
+            speed = target_distance
+            if target_bearing >= 90 and target_bearing <= 270:
+                speed *= -1
             #print("kozel")
-        if dsLValue > 0.75:
-            #print("nagyon bal")
-            driver.setSteeringAngle(0.5)
-        if dsRValue > 0.75:
-            #print("nagyon jobb")
-            driver.setSteeringAngle(-0.5)
-        if dsLValue > 0.25 and dsLValue <= 0.75:
+        if ds_values[2] > 0 and ds_values[2] > ds_values[3]:
+            angle = ((ds_values[2] - 0) / (1 - 0)) * (0.75 - 0.1) + 0.1
+            if target_bearing >= 90 and target_bearing <= 270:
+                speed = -2
+                angle = 0.75
+            #print("balelol")
+        if ds_values[3] > 0 and ds_values[3] > ds_values[2]:
+            angle = ((ds_values[3] - 0) / (1 - 0)) * (-0.75 + 0.1) - 0.1
+            if target_bearing >= 90 and target_bearing <= 270:
+                speed = -2
+                angle = -0.75
+            #print("jobbelol")
+        if ds_values[1] > 0 and ds_values[1] > ds_values[4]:
+            angle = ((ds_values[1] - 0) / (1 - 0)) * (0.75 - 0.1) + 0.1
+            if target_bearing >= 90 and target_bearing <= 270:
+                speed = -2
+                angle = 0.75
             #print("bal")
-            driver.setSteeringAngle(0.3)
-        if dsRValue > 0.25 and dsRValue <= 0.75:
+        if ds_values[4] > 0 and ds_values[4] > ds_values[1]:
+            angle = ((ds_values[4] - 0) / (1 - 0)) * (-0.75 + 0.1) - 0.1
+            if target_bearing >= 90 and target_bearing <= 270:
+                speed = -2
+                angle = -0.75
             #print("jobb")
-            driver.setSteeringAngle(-0.3)
-        if dsFLValue <= 0.1 and dsFLValue > 0:
-            #print("megjobalelol")
-            driver.setSteeringAngle(0.1)
-        if dsRLValue <= 0.1 and dsFLValue > 0:
-            #print("megjobalhatul")
-            driver.setSteeringAngle(0.1)
-        if dsFRValue <= 0.1 and dsFRValue > 0:
-            #print("megjojobbelol")
-            driver.setSteeringAngle(-0.1)
-        if dsRRValue <= 0.1 and dsRRValue > 0:
-            #print("megjojobbhatul")
-            driver.setSteeringAngle(-0.1)
-        if dsFLValue > 0.1 and dsFLValue <=0.4:
-            #print("balelol1")
-            driver.setSteeringAngle(0.25)
-        '''if dsRLValue > 0.1 and dsRLValue <=0.4:
-            #print("balhatul1")
-            driver.setSteeringAngle(0.25)'''
-        '''if dsRRValue > 0.1 and dsRRValue <=0.4:
-            #print("jobbhatul1")
-            driver.setSteeringAngle(-0.25)'''
-        if dsFRValue > 0.1 and dsFRValue <=0.4:
-            #print("jobbelol1")
-            driver.setSteeringAngle(-0.25)
-        if dsFLValue > 0.4:
-            #print("balelol2")
-            driver.setSteeringAngle(0.5)
-        '''if dsRLValue > 0.4:
-            #print("balhatul12")
-            driver.setSteeringAngle(0.5)'''
-        '''if dsRRValue > 0.4:
-            #print("jobbhatul2")
-            driver.setSteeringAngle(-0.5)'''
-        if dsFRValue > 0.4:
-            #print("jobbelol2")
-            driver.setSteeringAngle(-0.5)
-        if dsRRValue > 0.75 and dsFRValue == 0 and dsFLValue == 0 and dsLValue == 0 and dsRValue == 0:
-            driver.setCruisingSpeed(1)
-            driver.setSteeringAngle(-0.5)
-        if dsRLValue > 0.75 and dsFRValue == 0 and dsFLValue == 0 and dsLValue == 0 and dsRValue == 0:
-            driver.setCruisingSpeed(1)
-            driver.setSteeringAngle(0.5)
+        if ds_values[0] > 0.5 and ds_values[0] > ds_values[5]:
+            angle = ds_values[0] * 1
+            speed = ds_values[0] * 10
+            #print("balhatul")
+        if ds_values[5] > 0.5 and ds_values[5] > ds_values[0]:
+            angle = ds_values[5] * -1
+            speed = ds_values[5] * 10
+            #print("jobbhatul")
+        if angle > 0.75:
+            angle = 0.75
+        if angle < -0.75:
+            angle = -0.75
+        driver.setSteeringAngle(angle)
+        driver.setCruisingSpeed(speed)
+        
     else:
         driver.setCruisingSpeed(0)
         driver.setSteeringAngle(0)
+        
+    #print("angle:",angle)
+    #print("speed:",speed)
+    #print("balhatul:",ds_values[0])
+    #print("jobbhatul:",ds_values[5])
+    #print(turn)
+    #print(stop)
     #main controller
     
     #print ("bear:",target_bearing)
